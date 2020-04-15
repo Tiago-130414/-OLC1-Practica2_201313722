@@ -1,8 +1,8 @@
 class Token{
-    constructor(tok,lex,fil,col){
-        this.Token = tok;
-        this.Lexema = lex;
-        this.Fila = fil;
-        this.Columna = col;
+    constructor(toke,lexe,fila,colu){
+        this.Token = toke;
+        this.Lexema = lexe;
+        this.Fila = fila;
+        this.Columna = colu;
     }
 }

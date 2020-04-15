@@ -11,7 +11,7 @@ function abrir_archi() {
   var titulo = document.getElementById("pes" + cajatxt).innerHTML;
   
   //descargando texto
-  download(titulo+".cs",txt);
+  download(titulo,txt);
 }
 
 function download(filename, text) {

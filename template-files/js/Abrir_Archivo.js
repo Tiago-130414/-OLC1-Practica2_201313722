@@ -3,6 +3,7 @@ function abrir_archivo() {
   var abrirAr = document.createElement('input');
    abrirAr.setAttribute('type','file');
    abrirAr.setAttribute('a','file');
+   abrirAr.setAttribute('accept',".cs");
    abrirAr.click();
    abrirAr.addEventListener('change',leerArchivo,false);
   
