@@ -125,8 +125,8 @@
               ></a>
               <ul class="dropdown-menu">
                 <li class="dropdown-header">Reportes</li>
-                <li><a href="#">Reporte Python</a></li>
-                <li><a href="#">Reporte HTML</a></li>
+                <li><a href="#" id="ReportePython" onclick="Analizar_Sintacticamente();">Reporte Python</a></li>
+                <li><a href="#" id="ReporteHTML" onclick="removeTableBody();">Reporte HTML</a></li>
               </ul>
             </li>
           </ul>
@@ -175,7 +175,7 @@
               disabled = "true"
               placeholder="Traduccion de C# a Python"
               name="traduccion"
-              id="t0"
+              id="traduccionCPY"
               cols="80"
               rows="20"
             ></textarea>
@@ -203,7 +203,7 @@
                   <div class="tab-content" id="Pestanas2">
                     <div id="htmlTxt" class="tab-pane fade in active">
                       <textarea
-                        disabled = "true"
+                        readonly = "true"
                         placeholder="Texto HTML"
                         name="html"
                         id="htmlCajaTxt"
@@ -213,7 +213,7 @@
                     </div>
                     <div id="jsonTxt" class="tab-pane fade">
                       <textarea
-                        disabled = "true"
+                        readonly = "true"
                         placeholder="Texto JSON"
                         name="json"
                         id="jsonCajaTxt"
@@ -230,7 +230,7 @@
             <h2>Tabla De Variables</h2>
             <br /><br /><br />
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-              <table class="table table-bordered table-striped mb-0">
+              <table id = "Tabla_Variables" class="table table-bordered table-striped mb-0">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -365,7 +365,9 @@
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Guardar_Como.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Token.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\ErroresLexico_Sintacticos.js"></script>
+    <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Variables.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Analisis_Lexico.js"></script>
+    <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Analisis_Sintactico.js"></script>
   
   </body>
 </html>
