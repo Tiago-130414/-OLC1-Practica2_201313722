@@ -14,7 +14,7 @@
 
     <!-- normalize core CSS -->
     <link href="css/normalize.css" rel="stylesheet" />
-    
+
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="bootstrap/css/carousel.css" rel="stylesheet" />
@@ -114,9 +114,15 @@
                 <li>
                   <a href="#" id="Guardar" onclick="abrir_archi();">Guardar</a>
                 </li>
-                <li><a href="#" id="Guardar_Como" onclick="save_as();">Guardar Como</a></li>
+                <li>
+                  <a href="#" id="Guardar_Como" onclick="save_as();"
+                    >Guardar Como</a
+                  >
+                </li>
 
-                <li><a href="#" id="Analizar" onclick="A_Lexico();">Traducir</a></li>
+                <li>
+                  <a href="#" id="Analizar" onclick="analizar();">Traducir</a>
+                </li>
               </ul>
             </li>
             <li class="dropdown">
@@ -125,8 +131,12 @@
               ></a>
               <ul class="dropdown-menu">
                 <li class="dropdown-header">Reportes</li>
-                <li><a href="#" id="ReportePython" onclick="Analizar_Sintacticamente();">Reporte Python</a></li>
-                <li><a href="#" id="ReporteHTML" onclick="removeTableBody();">Reporte HTML</a></li>
+                <li>
+                  <a href="#" id="ReportePython" onclick="reporte_py();">Reporte Python</a>
+                </li>
+                <li>
+                  <a href="#" id="ReporteHTML" onclick="reporte_html();">Reporte HTML</a>
+                </li>
               </ul>
             </li>
           </ul>
@@ -172,7 +182,7 @@
             <h2>Traduccion</h2>
             <br /><br />
             <textarea
-              disabled = "true"
+              disabled="true"
               placeholder="Traduccion de C# a Python"
               name="traduccion"
               id="traduccionCPY"
@@ -203,7 +213,7 @@
                   <div class="tab-content" id="Pestanas2">
                     <div id="htmlTxt" class="tab-pane fade in active">
                       <textarea
-                        readonly = "true"
+                        readonly="true"
                         placeholder="Texto HTML"
                         name="html"
                         id="htmlCajaTxt"
@@ -213,7 +223,7 @@
                     </div>
                     <div id="jsonTxt" class="tab-pane fade">
                       <textarea
-                        readonly = "true"
+                        readonly="true"
                         placeholder="Texto JSON"
                         name="json"
                         id="jsonCajaTxt"
@@ -230,7 +240,10 @@
             <h2>Tabla De Variables</h2>
             <br /><br /><br />
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-              <table id = "Tabla_Variables" class="table table-bordered table-striped mb-0">
+              <table
+                id="Tabla_Variables"
+                class="table table-bordered table-striped mb-0"
+              >
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -358,7 +371,7 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap/js/ie10-viewport-bug-workaround.js"></script>    
+    <script src="bootstrap/js/ie10-viewport-bug-workaround.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Abrir_Archivo.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Generar_Pestanas.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Guardar.js"></script>
@@ -368,6 +381,68 @@
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Variables.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Analisis_Lexico.js"></script>
     <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\Analisis_Sintactico.js"></script>
-  
-  </body>
+    <script>
+      function analizar() {
+        var txt = document.getElementById("traduccionCPY");
+        txt.value = "";
+        A_Lexico();
+        if (TablaSimbolos.length != 0) {
+          Analizar_Sintacticamente();
+        } else {
+          alert("Hubo un problema, por favor realice un nuevo analisis lexico");
+        }
+        limpiar();
+      }
+    </script>
+    <script>
+      function limpiar() {
+        /*lexico*/
+        contador = 0;
+        fila = 1;
+        columna = 0;
+        estado = 0;
+        posArr = 0;
+        tk = "";
+        vectorChar = [];
+        TablaSimbolos = [];
+        TablaErrores = [];
+        /*sintactico*/
+        contadorSintax = 0;
+        token = "";
+        tokenSig = "";
+        nomVariable = "";
+        tipVariable = "";
+        filVariable = 0;
+        TablaDeVariables = [];
+        codHT = "";
+        /*Traduccion*/
+        variablesPython = "";
+        variablesPyParametros = "";
+        estoyEnM = false;
+        variableMetodo = "";
+        variableFuncion = "";
+        variableConsole = "";
+        contenidoImpresion = "";
+        voyAImprimir = false;
+        returnPy = "";
+        /*sentencias*/
+        estoyEnIF = false;
+        variableIF = "";
+        elsePy = "";
+        sentencias = "";
+        switchPy = "";
+        caseJuntar = "";
+        estoyEnSwitch = false;
+        /*ciclos */
+        variableFor = "";
+        defineFor = "";
+        variableWhile = "";
+        variableDo = "";
+        variablesWhile = "";
+        
+      }
+    </script>
+    <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\ReportePy.js"></script>  
+    <script src="C:\Users\Santiago Rivadeneira\Desktop\[OLC1]Practica2_201313722\template-files\js\ReporteHTML.js"></script> 
+</body>
 </html>

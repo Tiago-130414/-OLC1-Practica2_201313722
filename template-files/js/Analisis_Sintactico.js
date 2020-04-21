@@ -15,6 +15,23 @@ var variableFuncion = "";
 var variableConsole = "";
 var contenidoImpresion = "";
 var voyAImprimir = false;
+var returnPy ="";
+/*sentencias*/
+var estoyEnIF = false;
+var variableIF = "";
+var elsePy = "";
+var sentencias = "";
+var switchPy = "";
+var caseJuntar = "";
+var estoyEnSwitch = false;
+/*ciclos */
+var variableFor = "";
+var defineFor = "";
+var variableWhile = "";
+var variableDo = "";
+var variablesWhile = "";
+
+
 function Analizar_Sintacticamente() {
   contadorSintax = 0;
   if (!TablaSimbolos.empty) {
@@ -22,6 +39,7 @@ function Analizar_Sintacticamente() {
     INICIO();
     alert("termine analisis");
     removeTableBody();
+    console.log("Prueba: " + rangoF("a<b"));
   }
 }
 
@@ -240,7 +258,7 @@ function TERMINAL() {
     parea("Tk_Numero");
     variablesPython += TablaSimbolos[contadorSintax - 1].Lexema + " ";
   } else if (token == "Tk_CodHTML") {
-    codHT += SubCadena(TablaSimbolos[contadorSintax].Lexema) + "\n";
+    codHT += SubCadena(TablaSimbolos[contadorSintax].Lexema) + "\n\n";
     parea("Tk_CodHTML");
     //variablesPython += TablaSimbolos[contadorSintax-1].Lexema + " ";
   } else if (token == "Tk_Ttrue") {
@@ -349,59 +367,124 @@ function LISTA_CONTENIDO_METODO() {
     VARIABLES_COMENTARIOS();
   } else if (token == "Tk_Tif") {
     parea("Tk_Tif");
+    variableIF += TablaSimbolos[contadorSintax-1].Lexema +" ";
     parea("Tk_ParentesisAbre");
     LISTA_CONTENIDO();
+    variableIF += sentencias +" :\n";
+    append(variableIF);
+    variableIF = "";
+    sentencias = "";
     parea("Tk_ParentesisCierra");
     parea("Tk_LlaveAbre");
+    estoyEnIF = true;
+    sentencias = "";
     LISTA_CODIGO_METODO();
     parea("Tk_LlaveCierra");
+    variableIF = "";
+    sentencias = "";
     LISTA_ELSE();
+    estoyEnIF = false;
+    variableIF = "";
+    sentencias = "";
   } else if (token == "Tk_Tswitch") {
     parea("Tk_Tswitch");
+    switchPy += "def " + TablaSimbolos[contadorSintax-1].Lexema;
     parea("Tk_ParentesisAbre");
+    switchPy += TablaSimbolos[contadorSintax-1].Lexema;
+    switchPy += "case,"
     parea("Tk_Identificador");
+    switchPy += TablaSimbolos[contadorSintax-1].Lexema;
     parea("Tk_ParentesisCierra");
+    switchPy += TablaSimbolos[contadorSintax-1].Lexema;
+    switchPy += ": \n";
+    switchPy += "\tswitcher ="
     parea("Tk_LlaveAbre");
+    switchPy += TablaSimbolos[contadorSintax-1].Lexema + "\n";
+    append(switchPy);
+    switchPy = "";
+    estoyEnSwitch = true;
     DEFINE_CASE();
+    switchPy += caseJuntar;
+    caseJuntar ="";
     parea("Tk_LlaveCierra");
+    switchPy += "\n" + TablaSimbolos[contadorSintax-1].Lexema + "\n";
+    append(switchPy);
+    switchPy = "";
+    estoyEnSwitch = false;
   } else if (token == "Tk_Tfor") {
     parea("Tk_Tfor");
+    variableFor += TablaSimbolos[contadorSintax-1].Lexema +" ";
     parea("Tk_ParentesisAbre");
+    variablesPython = "";
     DEFINE_FOR();
+    variableFor += defineFor;
     parea("Tk_PuntoYComa");
+    defineFor = "";
+    sentencias = "";
     LISTA_CONTENIDO();
+    variableFor += " < ";
+    console.log(sentencias);
+    variableFor += rangoF(sentencias);
+    sentencias = "";
     parea("Tk_PuntoYComa");
     parea("Tk_Identificador");
     FOR_AD();
     parea("Tk_ParentesisCierra");
+    variableFor += TablaSimbolos[contadorSintax-1].Lexema + " : \n";
+    append(variableFor);
     parea("Tk_LlaveAbre");
+    variableFor = "";
+    defineFor = "";
+    sentencias = "";
+    variablesPython = "";
     LISTADO_C();
+    
     parea("Tk_LlaveCierra");
   } else if (token == "Tk_Twhile") {
     parea("Tk_Twhile");
+    variableWhile += TablaSimbolos[contadorSintax-1].Lexema + " ";
     parea("Tk_ParentesisAbre");
     LISTA_CONTENIDO();
+    variableWhile += sentencias + " : \n";
+    sentencias = "";
     parea("Tk_ParentesisCierra");
     parea("Tk_LlaveAbre");
+    append(variableWhile);
+    variableWhile="";
     LISTADO_C();
     parea("Tk_LlaveCierra");
   } else if (token == "Tk_Tdo") {
+    var sent = "";
     parea("Tk_Tdo");
+    variableDo += "while True: \n"
+    append(variableDo);
     parea("Tk_LlaveAbre");
     LISTADO_C();
+    variableDo = "";
     parea("Tk_LlaveCierra");
     parea("Tk_Twhile");
     parea("Tk_ParentesisAbre");
+    sentencias = "";
     LISTA_CONTENIDO();
+    variableDo += "\t\tif (" + sentencias+"): \n\t\tbreak\n";
+    append(variableDo);
     parea("Tk_ParentesisCierra");
     parea("Tk_PuntoYComa");
   } else if (token == "Tk_Treturn") {
     parea("Tk_Treturn");
+    returnPy += TablaSimbolos[contadorSintax-1].Lexema;
     if (token != "Tk_PuntoYComa") {
       EXPRESION();
+      returnPy += " " + variablesPython;
     }
+    append(returnPy);
+    returnPy ="";
     parea("Tk_PuntoYComa");
   } else if (token == "Tk_TConsole") {
+    variableConsole = "";
+    contenidoImpresion = "";
+    variablesPython = "";
+    voyAImprimir = false;
     parea("Tk_TConsole");
     parea("Tk_Punto");
     parea("Tk_TWrite");
@@ -409,8 +492,12 @@ function LISTA_CONTENIDO_METODO() {
     parea("Tk_ParentesisAbre");
     variableConsole += TablaSimbolos[contadorSintax - 1].Lexema + " ";
     voyAImprimir = true;
+    contenidoImpresion = "";
+    sentencias = "";
     LISTA_CONTENIDO();
+    sentencias = "";
     variableConsole += contenidoImpresion;
+    contenidoImpresion = "";
     parea("Tk_ParentesisCierra");
     variableConsole += TablaSimbolos[contadorSintax - 1].Lexema + "\n";
     parea("Tk_PuntoYComa");
@@ -439,7 +526,9 @@ function LISTA_CONTENIDO() {
       parea("Tk_Or");
       if (voyAImprimir == true) {
         contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
+        voyAImprimir = false;
       }
+      sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
       LISTA_CONTENIDO();
     }
   }
@@ -463,6 +552,7 @@ function CONTENIDO() {
       if (voyAImprimir == true) {
         contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
       }
+      sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
       CONTENIDO();
     }
   }
@@ -485,29 +575,34 @@ function O_CONTENIDO() {
     if (voyAImprimir == true) {
       contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
     }
+    sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
     LISTA_CONTENIDO();
   } else if (token == "Tk_Ttrue") {
     parea("Tk_Ttrue");
     if (voyAImprimir == true) {
       contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
     }
+    sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
     LISTA_CONTENIDO();
   } else if (token == "Tk_Tfalse") {
     parea("Tk_Tfalse");
     if (voyAImprimir == true) {
       contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
     }
+    sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
     LISTA_CONTENIDO();
   } else if (token == "Tk_ParentesisAbre") {
     parea("Tk_ParentesisAbre");
     if (voyAImprimir == true) {
       contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
     }
+    sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
     LISTA_CONTENIDO();
     parea("Tk_ParentesisCierra");
     if (voyAImprimir == true) {
       contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
     }
+    sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
   }
 }
 
@@ -535,6 +630,7 @@ function RELACIONALES() {
       if (voyAImprimir == true) {
         contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
       }
+      sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
       RELACIONALES();
     }
   }
@@ -554,17 +650,21 @@ function JUNTE() {
     if (voyAImprimir == true) {
       contenidoImpresion += variablesPython;
     }
+    sentencias += variablesPython;
+    variablesPython = "";
   } else if (token == "Tk_ParentesisAbre") {
     parea("Tk_ParentesisAbre");
     if (voyAImprimir == true) {
       contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
     }
+    sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
     LISTA_CONTENIDO();
     /*concatenar las variables si se va a imprimir*/
     parea("Tk_ParentesisCierra");
     if (voyAImprimir == true) {
       contenidoImpresion += TablaSimbolos[contadorSintax - 1].Lexema;
     }
+    sentencias += TablaSimbolos[contadorSintax - 1].Lexema;
   }
 }
 
@@ -576,17 +676,24 @@ function LISTA_ELSE() {
       LISTA_ELSE();
     } else if (token == "Tk_LlaveAbre") {
       ELSE();
+      
     }
   }
 }
 
 function ELSE_IF() {
   if (token == "Tk_Tif") {
+    elsePy += "elif ";
     parea("Tk_Tif");
     parea("Tk_ParentesisAbre");
     LISTA_CONTENIDO();
+    elsePy += sentencias + " : \n";
     parea("Tk_ParentesisCierra");
     parea("Tk_LlaveAbre");
+    append(elsePy);
+    estoyEnIF=true;
+    elsePy = "";
+    sentencias = "";
     LISTA_CODIGO_METODO();
     parea("Tk_LlaveCierra");
   }
@@ -595,6 +702,10 @@ function ELSE_IF() {
 function ELSE() {
   if (token == "Tk_LlaveAbre") {
     parea("Tk_LlaveAbre");
+    elsePy += "else :\n";
+    append(elsePy);
+    elsePy = "";
+    estoyEnIF=true;
     LISTA_CODIGO_METODO();
     parea("Tk_LlaveCierra");
   }
@@ -629,8 +740,12 @@ function CASE() {
     token == "Tk_Tfalse"
   ) {
     parea(token);
+    caseJuntar +=TablaSimbolos[contadorSintax-1].Lexema;
   }
   parea("Tk_DosPuntos");
+  caseJuntar += TablaSimbolos[contadorSintax-1].Lexema+" ";
+  append(caseJuntar);
+  caseJuntar = "";
   LISTADO_C();
 }
 
@@ -670,10 +785,17 @@ function LISTADO_C() {
     LISTADO_C();
   } else if (token == "Tk_Tbreak") {
     parea("Tk_Tbreak");
+    if(estoyEnSwitch==false){
+      append("break\n");
+    }
     parea("Tk_PuntoYComa");
+    if(estoyEnSwitch==true){
+      append(";"+"\n");
+    }
     LISTADO_C();
   } else if (token == "Tk_Tcontinue") {
     parea("Tk_Tcontinue");
+    append("continue\n");
     parea("Tk_PuntoYComa");
     LISTADO_C();
   }
@@ -682,7 +804,10 @@ function LISTADO_C() {
 function CASE_DEFAULT() {
   if (token == "Tk_Tdefault") {
     parea("Tk_Tdefault");
+    caseJuntar += "1000";
     parea("Tk_DosPuntos");
+    caseJuntar += TablaSimbolos[contadorSintax-1].Lexema;
+    append(caseJuntar);
     LISTADO_C();
   }
 }
@@ -697,12 +822,20 @@ function DEFINE_FOR() {
   ) {
     parea(token);
     parea("Tk_Identificador");
+    defineFor += TablaSimbolos[contadorSintax-1].Lexema + " in range(";
     parea("Tk_Igual");
+    variablesPython = "";
     EXPRESION();
+    defineFor += variablesPython;
+    variablesPython = "";
   } else if (token == "Tk_Identificador") {
     parea("Tk_Identificador");
+    defineFor += TablaSimbolos[contadorSintax-1].Lexema + " in range(";
     parea("Tk_Igual");
+    variablesPython = "";
     EXPRESION();
+    defineFor += variablesPython ;
+    variablesPython = "";
   }
 }
 
@@ -757,8 +890,8 @@ function parea(preanalisis) {
 function removeTableBody() {
   $("#Tabla_Variables tbody").empty();
   LlenarVariables();
-  var txtAreaHTML = document.getElementById("htmlTxt");
-  txtAreaHTML.innerText = codHT;
+  var txtAreaHTML = document.getElementById("htmlCajaTxt");
+  txtAreaHTML.innerHTML = codHT;
 }
 
 function LlenarVariables() {
@@ -849,7 +982,7 @@ function metodoFuncion(variable) {
 }
 
 function asigT(txt) {
-  append(txt);
+  append(txt+"\n");
 }
 
 function metodo(mtdo) {
@@ -882,7 +1015,6 @@ function arreglarConsole(cad) {
       }
     } else if (txtV[cont] == "(") {
       cadN += txtV[cont];
-      console.log("por la gran puta aqui esta esa mierda");
       estoyEnParentesis = true;
     } else if (txtV[cont] == ")") {
       cadN += txtV[cont];
@@ -903,10 +1035,18 @@ function append(nTraduccion) {
     var textoEnTraduccion = document.getElementById("traduccionCPY").value;
     if (estoyEnM == true) {
       txtAreaT.value = textoEnTraduccion + "\t" + nTraduccion;
-    } else {
+      estoyEnM = false;
+    } else if(estoyEnIF==true){
+      txtAreaT.value = textoEnTraduccion + "\t\t" + nTraduccion;
+      estoyEnIF =false;
+    }else {
       txtAreaT.value = textoEnTraduccion + nTraduccion;
     }
   }
+}
+
+function returnAscii(caracter) {
+  return caracter.charCodeAt(0);
 }
 
 function isLetter(caracter) {
@@ -925,4 +1065,31 @@ function isNumber(caracter) {
   } else {
     return false;
   }
+}
+
+function sacarIgual(cad){
+  var res = "0";
+  if(cad.includes("=")){
+    var pos = cad.search("=")+1;
+    res = cad.substring(pos,cad.length);
+  }
+  return res;
+}
+
+function rangoF(cad) {
+  var res = "("+cad+")";
+  if(cad.includes("<")){
+    var pos = (cad.search("<"))+1;
+    res = cad.substring(pos,cad.length);
+  }else if(cad.includes(">")){
+    var pos = (cad.search(">"))+1;
+    res = cad.substring(pos,cad.length);
+  }else if(cad.includes("<=")){
+    var pos = (cad.search("<="))+1;
+    res = cad.substring(pos,cad.length);
+  }else if(cad.includes("=>")){
+    var pos = (cad.search("=>"))+1;
+    res = cad.substring(pos,cad.length);
+  }
+  return res;
 }
