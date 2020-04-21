@@ -25,12 +25,7 @@ function A_Lexico() {
     console.log(TablaSimbolos[p]);
     p++;
   }
-  console.log("ERRORES------------------------------------");
-  var K = 0;
-  while (K < TablaErrores.length) {
-    console.log(TablaErrores[K]);
-    K++;
-  }
+  alert("termine analisis lexico")
 }
 
 function automata(caracter) {
@@ -55,7 +50,11 @@ function automata(caracter) {
         //ESPACIO EN BLANCO
         columna++;
         estado = 0;
-      } else if (caracter == '"') {
+      }  else if (caracter == "\t") {
+        //ESPACIO EN BLANCO
+        columna++;
+        estado = 0;
+      }else if (caracter == '"') {
         //TEXTO
         tk += caracter;
         estado = 5;

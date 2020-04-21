@@ -37,7 +37,7 @@ function Analizar_Sintacticamente() {
   if (!TablaSimbolos.empty) {
     token = TablaSimbolos[contadorSintax].Token;
     INICIO();
-    alert("termine analisis");
+    alert("termine analisis sintactico");
     removeTableBody();
     console.log("Prueba: " + rangoF("a<b"));
   }
@@ -293,6 +293,13 @@ function modo_panico_expre(preanalisis) {
     contadorSintax++;
     if (contadorSintax < TablaSimbolos.length) {
       token = TablaSimbolos[contadorSintax].Token;
+      var err = new ErroresLexico_Sintacticos(
+        "Error Sintactico",
+        TablaSimbolos[contadorSintax].Fila,
+        TablaSimbolos[contadorSintax].Columna,
+        "Se esperaba: " + preanalisis + " y llego el token: " + TablaSimbolos[contadorSintax].Token
+      );
+      TablaErrores.push(err);
     }
     modo_panico_expre(token);
   } else {
@@ -854,6 +861,13 @@ function modo_panico(preanalisis) {
     contadorSintax++;
     if (contadorSintax < TablaSimbolos.length) {
       token = TablaSimbolos[contadorSintax].Token;
+      var err = new ErroresLexico_Sintacticos(
+        "Error Sintactico",
+        TablaSimbolos[contadorSintax].Fila,
+        TablaSimbolos[contadorSintax].Columna,
+        "Se esperaba: " + preanalisis + " y llego el token: " + TablaSimbolos[contadorSintax].Token
+      );
+      TablaErrores.push(err);
     }
     modo_panico(preanalisis);
   } else {
@@ -872,6 +886,13 @@ function parea(preanalisis) {
     console.log(
       "ERR: " + preanalisis + " LEXEMA " + TablaSimbolos[contadorSintax].Lexema
     );
+    var err = new ErroresLexico_Sintacticos(
+      "Error Sintactico",
+      TablaSimbolos[contadorSintax].Fila,
+      TablaSimbolos[contadorSintax].Columna,
+      "Se esperaba: " + preanalisis + " y llego el token: " + TablaSimbolos[contadorSintax].Token
+    );
+    TablaErrores.push(err);
     modo_panico(preanalisis);
   } else {
     if (contadorSintax < TablaSimbolos.length) {
